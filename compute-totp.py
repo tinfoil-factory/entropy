@@ -23,5 +23,9 @@ def compute_totp(secret: str):
 
     return '{:06d}'.format(bin_code % 1_000_000)
 
-input_secret = getpass.getpass("secret: ")
-print(compute_totp(input_secret))
+try:
+    input_secret = getpass.getpass("secret: ")
+    print(compute_totp(input_secret))
+except Exception as e:
+    print(e, file=sys.stderr)
+    exit(1)
