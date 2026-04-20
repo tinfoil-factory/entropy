@@ -16,6 +16,9 @@ def parse_input():
 
 try:
     password_length = parse_input()
+    if password_length <= 0:
+        raise ValueError(f"Password length must be positive, got {password_length}")
+
     alphabet = string.ascii_letters
 
     bits_of_entropy = math.log2(len(alphabet) ** password_length)

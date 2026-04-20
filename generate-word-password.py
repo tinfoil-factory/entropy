@@ -4,8 +4,9 @@ import secrets
 import re
 import sys
 import math
+from pathlib import Path
 
-wordlist_filename = 'agwordlist.txt'
+wordlist_path = Path(__file__).parent / 'agwordlist.txt'
 expected_wordlist_length = 18325
 
 def parse_input():
@@ -18,11 +19,11 @@ def parse_input():
         raise ValueError(f"Expected an integer argument, got '{sys.argv[1]}'")
 
 def load_wordlist():
-    with open(wordlist_filename) as f:
+    with open(wordlist_path) as f:
         lines = f.read().splitlines()
         
     for line in lines:
-        if not re.search(r'[a-z]+', line):
+        if not re.search(r'^[a-z]+$', line):
             raise ValueError(f"Unexpected character in word {line}")
 
     if len(lines) != expected_wordlist_length or len(set(lines)) != expected_wordlist_length:
@@ -32,6 +33,9 @@ def load_wordlist():
 
 try:
     password_length = parse_input()
+    if password_length <= 0:
+        raise ValueError(f"Password length must be positive, got {password_length}")
+
     alphabet = load_wordlist()
 
     bits_of_entropy = math.log2(len(alphabet) ** password_length)

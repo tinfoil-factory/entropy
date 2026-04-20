@@ -5,12 +5,7 @@ import hashlib
 import hmac
 import sys
 import time
-
-def parse_input():
-    if len(sys.argv) != 2:
-        raise ValueError(f"Expected one argument, got {len(sys.argv)}")
-
-    return sys.argv[1]
+import getpass
 
 def compute_totp(secret: str):
     # https://datatracker.ietf.org/doc/html/rfc4226
@@ -28,5 +23,5 @@ def compute_totp(secret: str):
 
     return '{:06d}'.format(bin_code % 1_000_000)
 
-input_secret = parse_input()
+input_secret = getpass.getpass("secret: ")
 print(compute_totp(input_secret))
