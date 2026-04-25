@@ -38,7 +38,7 @@ try:
 
     alphabet = load_wordlist()
 
-    bits_of_entropy = math.log2(len(alphabet) ** password_length)
+    bits_of_entropy = password_length * math.log2(len(alphabet))
     print('entropy: %2.f bits' % bits_of_entropy, file=sys.stderr)
 
     print(' '.join(secrets.choice(alphabet) for i in range(password_length)))
