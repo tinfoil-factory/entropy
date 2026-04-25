@@ -6,12 +6,19 @@ import hmac
 import sys
 import time
 import getpass
+import re
 
 def compute_totp(secret: str):
     # https://datatracker.ietf.org/doc/html/rfc4226
+    if not re.search(r'^[A-Z2-7]+[=]{0,6}$', secret):
+        raise ValueError("Secret can only contain 'A-Z', '2-7', and '='")
 
-    encoded_secret = base64.b32decode(secret)
-    encoded_time = int(time.time() / 30).to_bytes(8, byteorder='big')
+    try:
+      encoded_secret = base64.b32decode(secret)
+    except:
+        raise ValueError("Failed to Base32 decode secret")
+
+    encoded_time = (int(time.time()) // 30).to_bytes(8, byteorder='big')
 
     hmac_result = hmac.new(encoded_secret, encoded_time, hashlib.sha1).digest()
 
